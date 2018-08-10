@@ -11,7 +11,11 @@
 </template>
 
 <script>
+
+import {provider, auth} from '@/firebase.js'
 import {mapActions} from 'vuex'
+import axios from 'axios'
+import router from '../router'
 
 export default {
   data () {
@@ -22,10 +26,36 @@ export default {
   },
   methods: {
     ...mapActions([
-      'login', 'loginFb'
+      'login'
     ]),
     register () {
       this.$router.replace('/register')
+    },
+    loginFb () {
+      auth.signInWithPopup(provider).then(function (result) {
+        var token = result.credential.accessToken
+        axios({
+          method: 'POST',
+          url: 'http://localhost:3000/users/loginFb',
+          data: {
+            fbToken: token
+          }
+        })
+          .then(response => {
+            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('name', response.data.name)
+            router.push('/home')
+          })
+          .catch(err => {
+            console.log('error -->', err.message)
+          })
+      }).catch(function (error) {
+        console.log('error -->', error.message)
+        // var errorCode = error.code
+        // var errorMessage = error.message
+        // var email = error.email
+        // var credential = error.credential
+      })
     }
   }
 }

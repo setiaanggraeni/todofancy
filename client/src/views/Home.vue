@@ -21,7 +21,6 @@
           <td>{{task.dueDate.slice(0,10)}}</td>
           <td>{{task.status}}</td>
           <td><a href="#" style="color:black"><i class="far fa-edit" data-toggle="modal" data-target="#exampleModal"></i></a> || <a href="#" style="color:black"><i class="far fa-trash-alt" @click="deleteTask(task._id)"></i></a></td>
-            
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -63,41 +62,73 @@ import {mapActions, mapState} from 'vuex'
 import swal from 'sweetalert'
 import router from '../router'
 import AddTodo from '@/components/AddTodo.vue'
+import axios from 'axios'
 
 export default {
-    data () {
-        return {
-            name: '',
-            newTask: '',
-            newDuedate: '',
-            newStatus: ''
-        }
-    },
-    components: {
-      AddTodo
-    },
-    computed: { // panggil state yg d store disini
-        ...mapState([
-            'tasks'
-        ])
-    },
-    mounted () {
-        let name = localStorage.getItem('name')
-        let token = localStorage.getItem('token')
-        if (token) {
-          this.name = name.toUpperCase()
-          this.getAllTodo()
-          swal(`Welcome ${name}`, 'You clicked the button!', 'success')
-        } else {
-          swal('Please login to view your Todolist!')
-          router.push('/')
-        } 
-    },
-    methods: {
-        ...mapActions([
-            'getAllTodo', 'editTask', 'deleteTask', 'logout'
-        ])
+  data () {
+    return {
+      name: '',
+      newTask: '',
+      newDuedate: '',
+      newStatus: ''
     }
+  },
+  components: {
+    AddTodo
+  },
+  computed: { // panggil state yg d store disini
+    ...mapState([
+      'tasks'
+    ])
+  },
+  mounted () {
+    let name = localStorage.getItem('name')
+    let token = localStorage.getItem('token')
+    let deadline = []
+    let outOfDeadline = []
+    if (token) {
+      this.name = name.toUpperCase()
+      this.getAllTodo()
+      swal(`Welcome ${name}`, 'You clicked the button!', 'success')
+      // console.log('----', this.tasks)
+      this.tasks.forEach(element => {
+        let now = new Date().getDate()
+        let taskDate = new Date(element.dueDate.slice(0, 10)).getDate()
+        let day = now - taskDate
+        if (day < 1) {
+          deadline.push(element)
+        } else if (day < 0) {
+          outOfDeadline.push(element)
+        }
+        if (deadline.length !== 0) {
+          axios.post('http://localhost:3000/users/sendmail', {
+            email: deadline[0].userId.email,
+            yourDeadline: deadline
+          }, {
+            headers: {
+              token: token
+            }
+          })
+            .then(dead => {
+              console.log(dead)
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
+        // console.log('deadline--', deadline)
+        // console.log(outOfDeadline)
+      })
+    } else {
+      swal('Please login to view your Todolist!')
+      router.push('/')
+    }
+  },
+  methods: {
+    ...mapActions([
+      'getAllTodo', 'editTask', 'deleteTask', 'logout'
+    ])
+  }
 }
 </script>
 
@@ -130,5 +161,3 @@ export default {
   margin-left: 20px;
 }
 </style>
-
-

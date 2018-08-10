@@ -23,7 +23,6 @@ export default {
 body{
   background: linear-gradient(#C6FFDD, #FBD786, #f7797d);
   height: 100vh;
-  font-family: 'Comic Sans MS', Arial !important;
+  font-family: 'Comic Sans MS', Arial !important
 }
 </style>
-

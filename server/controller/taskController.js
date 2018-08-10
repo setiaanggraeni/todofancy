@@ -24,12 +24,14 @@ class TaskController {
         let decoded = jwt.verify(token, process.env.secretKey)
         let theTasks = []
         Task.find({})
+        .populate('userId')
         .then(allTasks => {
             allTasks.forEach(task => {
-                if(task.userId == decoded.id){
+                if(task.userId._id == decoded.id){
                     theTasks.push(task)
                 }
             })
+            // console.log('tasknya', theTasks);
             res.status(200).json({
                 msg: 'Here are the all tasks',
                 theTasks
