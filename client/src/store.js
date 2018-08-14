@@ -4,20 +4,40 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import router from './router'
 import swal from 'sweetalert'
-
+const baseUrl = 'http://localhost:3000'
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)
 
 export default new Vuex.Store({
   state: {
-    tasks: []
+    tasks: [],
+    deadline: [],
+    isDealine: false
   },
   mutations: {
     setTasks (state, payload) { // buat function setTasks
       state.tasks = payload // state.tasks itu tasks nya ambil datr data yg d tasks
+    },
+    modifyDeadline (state, payload) {
+      state.deadline.push(payload)
+    },
+    changeIsDeadline (state, payload) {
+      state.isDealine = payload
     }
   },
   actions: {
+    sendEmail (context, payload) {
+      axios.post(baseUrl + '/users/sendmail', {
+        email: payload.userId.email,
+        yourDeadline: this.state.deadline
+      })
+        .then(emailSent => {
+          console.log('email sent')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     login (context, payload) {
       axios.post('http://localhost:3000/users/login', {
         email: payload.email,

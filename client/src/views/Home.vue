@@ -78,56 +78,34 @@ export default {
   },
   computed: { // panggil state yg d store disini
     ...mapState([
-      'tasks'
+      'tasks', 'deadline', 'isDeadline'
     ])
   },
-  mounted () {
+  created () {
     let name = localStorage.getItem('name')
     let token = localStorage.getItem('token')
-    let deadline = []
-    let outOfDeadline = []
     if (token) {
-      this.name = name.toUpperCase()
       this.getAllTodo()
-      swal(`Welcome ${name}`, 'You clicked the button!', 'success')
-      // console.log('----', this.tasks)
-      this.tasks.forEach(element => {
-        let now = new Date().getDate()
-        let taskDate = new Date(element.dueDate.slice(0, 10)).getDate()
-        let day = now - taskDate
-        if (day < 1) {
-          deadline.push(element)
-        } else if (day < 0) {
-          outOfDeadline.push(element)
-        }
-        if (deadline.length !== 0) {
-          axios.post('http://localhost:3000/users/sendmail', {
-            email: deadline[0].userId.email,
-            yourDeadline: deadline
-          }, {
-            headers: {
-              token: token
-            }
-          })
-            .then(dead => {
-              console.log(dead)
-            })
-            .catch(err => {
-              console.log(err)
-            })
-        }
-        // console.log('deadline--', deadline)
-        // console.log(outOfDeadline)
-      })
-    } else {
-      swal('Please login to view your Todolist!')
-      router.push('/')
     }
   },
   methods: {
     ...mapActions([
-      'getAllTodo', 'editTask', 'deleteTask', 'logout'
+      'getAllTodo', 'editTask', 'deleteTask', 'logout', 'sendEmail'
     ])
+  },
+  watch: {
+    tasks (val) {
+      let self = this
+      val.forEach(el => {
+        let now = new Date().getDate()
+        let isDeadlineTrue = Number(el.dueDate.split('-')[2].split('T')[0]) - now
+        if (isDeadlineTrue !== 0) {
+          self.$store.commit('modifyDeadline', el)
+          self.$store.commit('changeIsDeadline', true)
+          self.sendEmail(el)
+        }
+      })
+    }
   }
 }
 </script>

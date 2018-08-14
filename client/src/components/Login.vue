@@ -34,6 +34,7 @@ export default {
     loginFb () {
       auth.signInWithPopup(provider).then(function (result) {
         var token = result.credential.accessToken
+        // 
         axios({
           method: 'POST',
           url: 'http://localhost:3000/users/loginFb',
