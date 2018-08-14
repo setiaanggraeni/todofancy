@@ -1,7 +1,7 @@
 <template>
   <div>
     <a href="#"><i class="fas fa-sign-out-alt" @click="logout" id="logout">Logout</i></a>
-    <h3 id="welcome">Hi, {{name}}</h3><br>
+    <h3 id="welcome">Hi, {{username}}</h3><br>
         <AddTodo/><br><br>
     <label>Here's your todo list:</label>
     <table class="table" id="allTodos">
@@ -70,7 +70,8 @@ export default {
       name: '',
       newTask: '',
       newDuedate: '',
-      newStatus: ''
+      newStatus: '', 
+      username: ''
     }
   },
   components: {
@@ -87,6 +88,9 @@ export default {
     if (token) {
       this.getAllTodo()
     }
+  },
+  mounted () {
+    this.username = localStorage.getItem('name')
   },
   methods: {
     ...mapActions([
