@@ -14,10 +14,13 @@
 </head>
 <body>
   <div id="app">
-      <h1 style="text-align:center">Login</h1>
+    <h1 style="text-align:center">Login</h1>
     <login style="margin-top:20px;"></login>
   </div>
+  <small style="margin-left: 260px">or login with <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+            </fb:login-button></small>
   <script src="./script/compents/login.js"></script>
   <script src="./script/index.js"></script>
+  <script src="./script/fb.js"></script>
 </body>
 </html>

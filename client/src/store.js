@@ -76,8 +76,7 @@ export default new Vuex.Store({
         }
       })
         .then(tasks => {
-          let theTasks = tasks.data.theTasks
-          context.commit('setTasks', theTasks) // setTasks dapat dari nama function yang di mutations
+          context.commit('setTasks', tasks.data.allTasks) // setTasks dapat dari nama function yang di mutations
         })
         .catch(err => {
           swal(err.message)

@@ -1,8 +1,6 @@
-const mongoose = require('mongoose')
 const User = require('../models/users')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-var FB = require('fb')
 const axios = require('axios')
 var nodemailer = require('nodemailer')
 
@@ -39,17 +37,17 @@ class UserController {
         User.findOne({email : email})
         .then(user => {
             if(user){
-                let compare = bcrypt.compareSync(password, user.password)              
+                let compare = bcrypt.compareSync(password, user.password)
                 if(compare){
                     jwt.sign({id: user._id, name: user.name}, process.env.secretKey, (err, token) => {
                         if(err) res.status(401).json('Failed to sign token')
-                        res.status(200).json({
+                        res.status(201).json({
                             msg: 'Successfully login!',
                             token,
                             name: user.name
                         })
                     })
-                }  else {
+                } else {
                     res.status(401).json('Login failed, please check your email/password!')
                 }
             } else {
@@ -90,17 +88,17 @@ class UserController {
                         })
                     })
                 } else {
-                    let compare = bcrypt.compareSync(response.data.id, user.password)              
+                    let compare = bcrypt.compareSync(response.data.id, user.password)
                     if(compare){
                         jwt.sign({id: user._id, name: user.name}, process.env.secretKey, (err, token) => {
                             if(err) res.status(401).json('Failed to sign token')
-                            res.status(200).json({
+                            res.status(201).json({
                                 msg: 'Successfully login!',
                                 token,
                                 name: user.name
                             })
                         })
-                    }  else {
+                    } else {
                         res.status(401).json('Login failed, please check your email/password!')
                     }
                 }
@@ -151,6 +149,7 @@ class UserController {
             }
         })
     }
+    
 }
 
 module.exports = UserController

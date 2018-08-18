@@ -103,7 +103,7 @@ export default {
       val.forEach(el => {
         let now = new Date().getDate()
         let isDeadlineTrue = Number(el.dueDate.split('-')[2].split('T')[0]) - now
-        if (isDeadlineTrue !== 0) {
+        if (isDeadlineTrue >= 0 && isDeadlineTrue <= 1) {
           self.$store.commit('modifyDeadline', el)
           self.$store.commit('changeIsDeadline', true)
           self.sendEmail(el)

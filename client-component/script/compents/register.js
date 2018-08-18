@@ -8,7 +8,7 @@ Vue.component('register', {
       <label>Password</label>
       <input type="password" v-model="password" class="form-control" placeholder="Password"><br>
       <button type="submit" class="btn btn-primary" @click.prevent="register()">Register</button>
-      <small id="register" class="form-text text-muted">Already have account? <a href="#" @click="login">Login</a> manual or login with<img src="./facebook.png" width="80px;" id="fbicon"/></small>
+      <small id="register" class="form-text text-muted">Already have account? <a href="#" @click="login">Login</a></small>
     </form>
   `,
   data () {
@@ -33,7 +33,26 @@ Vue.component('register', {
       })
     },
     loginFb () {
-
+      auth.signInWithPopup(provider).then(function (result) {
+        var token = result.credential.accessToken
+        axios({
+          method: 'POST',
+          url: 'http://localhost:3000/users/loginFb',
+          data: {
+            fbToken: token
+          }
+        })
+        .then(response => {
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('name', response.data.name)
+          router.push('/home')
+        })
+        .catch(err => {
+          console.log('error -->', err.message)
+        })
+      }).catch(function (error) {
+        console.log('error -->', error.message)
+      })
     },
     login () {
       window.location="index.html"

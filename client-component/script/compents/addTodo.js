@@ -29,6 +29,7 @@ Vue.component('add-todo', {
         alert('Successfully add new todo!')
         this.todoName = ''
         this.dueDate = ''
+        window.location="home.html"
       })
       .catch(err => {
         console.log(err.message)
