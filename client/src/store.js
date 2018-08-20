@@ -4,7 +4,6 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import router from './router'
 import swal from 'sweetalert'
-const baseUrl = 'http://localhost:3000'
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)
 
@@ -28,7 +27,7 @@ export default new Vuex.Store({
   },
   actions: {
     sendEmail (context, payload) {
-      axios.post(baseUrl + '/users/sendmail', {
+      axios.post('https://server-todofancy.setiaanggraeni.co/users/sendmail', {
         email: payload.userId.email,
         yourDeadline: this.state.deadline
       })
@@ -40,7 +39,7 @@ export default new Vuex.Store({
         })
     },
     login (context, payload) {
-      axios.post('http://localhost:3000/users/login', {
+      axios.post('https://server-todofancy.setiaanggraeni.co/users/login', {
         email: payload.email,
         password: payload.password
       })
@@ -55,7 +54,7 @@ export default new Vuex.Store({
         })
     },
     register (context, payload) {
-      axios.post('http://localhost:3000/users/register', {
+      axios.post('https://server-todofancy.setiaanggraeni.co/users/register', {
         name: payload.name,
         email: payload.email,
         password: payload.password
@@ -71,7 +70,7 @@ export default new Vuex.Store({
     },
     getAllTodo (context, payload) {
       let token = localStorage.getItem('token')
-      axios.get('http://localhost:3000/tasks', {
+      axios.get('https://server-todofancy.setiaanggraeni.co/tasks', {
         headers: {
           token: token
         }
@@ -85,7 +84,7 @@ export default new Vuex.Store({
     },
     deleteTask (context, payload) {
       let token = localStorage.getItem('token')
-      axios.delete(`http://localhost:3000/tasks/delete/${payload}`, {
+      axios.delete(`https://server-todofancy.setiaanggraeni.co/tasks/delete/${payload}`, {
         headers: {
           token: token
         }
@@ -100,7 +99,7 @@ export default new Vuex.Store({
     },
     editTask (context, payload) {
       let token = localStorage.getItem('token')
-      axios.put(`http://localhost:3000/tasks/edit/${payload.id}`, {
+      axios.put(`https://server-todofancy.setiaanggraeni.co/tasks/edit/${payload.id}`, {
         task: payload.task,
         dueDate: payload.dueDate,
         status: payload.status
@@ -119,7 +118,7 @@ export default new Vuex.Store({
     },
     addTodo (context, payload) {
       let token = localStorage.getItem('token')
-      axios.post('http://localhost:3000/tasks/create', {
+      axios.post('https://server-todofancy.setiaanggraeni.co/tasks/create', {
         task: payload.task,
         dueDate: payload.dueDate
       }, {

@@ -36,7 +36,7 @@ export default {
         var token = result.credential.accessToken
         axios({
           method: 'POST',
-          url: 'http://localhost:3000/users/loginFb',
+          url: 'https://server-todofancy.setiaanggraeni.co/users/loginFb',
           data: {
             fbToken: token
           }
