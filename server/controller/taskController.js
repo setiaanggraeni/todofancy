@@ -14,7 +14,6 @@ class TaskController {
             res.status(200).json(task)
         })
         .catch(err => {
-            console.log('ini error',err);
             res.status(400).json(err)
         })
     }

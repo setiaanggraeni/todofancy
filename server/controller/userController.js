@@ -117,7 +117,6 @@ class UserController {
     }
 
     static sendMail(req, res){
-        // console.log(req.body)
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -130,8 +129,7 @@ class UserController {
         var dealines = []
         allDeadline.forEach(element => {
             dealines.push({Task: element.task, Deadline: element.dueDate.slice(0,10)})
-        });
-        // console.log('dealine-----------',allDeadline)
+        })
         var mailOptions = {
             from: `${process.env.email}`,
             to: `${req.body.email}`,
@@ -142,10 +140,8 @@ class UserController {
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
                 res.status(500).json(error.message)
-                console.log('error nih------',error);
             } else {
                 res.status(200).json(info.response)
-                console.log('Email sent: ' + info.response);
             }
         })
     }

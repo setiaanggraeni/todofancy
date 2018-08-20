@@ -20,7 +20,7 @@
           <td>{{task.createdAt.slice(0,10)}}</td>
           <td>{{task.dueDate.slice(0,10)}}</td>
           <td>{{task.status}}</td>
-          <td><a href="#" style="color:black"><i class="far fa-edit" data-toggle="modal" data-target="#exampleModal"></i></a> || <a href="#" style="color:black"><i class="far fa-trash-alt" @click="deleteTask(task._id)"></i></a></td>
+          <td><a href="#" style="color:black"><i class="far fa-edit" @click="forEdit(task)" data-toggle="modal" data-target="#exampleModal"></i></a> || <a href="#" style="color:black"><i class="far fa-trash-alt" @click="deleteTask(task._id)"></i></a></td>
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -33,9 +33,9 @@
                   <div class="modal-body">
                     <form id="formEdit">
                       <label>Task: </label><br>
-                      <input type="text" v-model="task.task" id="inputEdit"><br>
+                      <input type="text" v-model="dataEdit.task" id="inputEdit"><br>
                       <label>Duedate: </label><br>
-                      <input type="date" v-model="task.dueDate" id="inputEdit"><br><br>
+                      <input type="date" v-model="dataEdit.dueDate" id="inputEdit"><br><br>
                       <select v-model="newStatus" id="inputEdit">
                         <option disabled value="">Please select the status</option>
                         <option value="uncomplete">Uncomplete</option>
@@ -45,7 +45,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnsave" @click="editTask({id: task._id, task: task.task, dueDate: task.dueDate, status: newStatus})">Save changes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnsave" @click="editTask({id: dataEdit._id, task: dataEdit.task, dueDate: dataEdit.dueDate, status: newStatus})">Save changes</button>
                   </div>
                 </div>
               </div>
@@ -79,7 +79,7 @@ export default {
   },
   computed: { // panggil state yg d store disini
     ...mapState([
-      'tasks', 'deadline', 'isDeadline'
+      'tasks', 'deadline', 'isDeadline', 'dataEdit'
     ])
   },
   created () {
@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getAllTodo', 'editTask', 'deleteTask', 'logout', 'sendEmail'
+      'getAllTodo', 'editTask', 'deleteTask', 'logout', 'sendEmail', 'forEdit'
     ])
   },
   watch: {

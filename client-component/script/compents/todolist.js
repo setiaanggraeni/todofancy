@@ -16,7 +16,7 @@ Vue.component('todo-list', {
           <td>{{todo.createdAt.slice(0,10)}}</td>
           <td>{{todo.dueDate.slice(0,10)}}</td>
           <td>{{todo.status}}</td>
-          <td><a href="#" style="color:black"><i class="far fa-edit" data-toggle="modal" data-target="#exampleModal"></i></a> || <a href="#" style="color:black"><i class="far fa-trash-alt" @click="deleteTask(todo._id)"></i></a></td>
+          <td><a href="#" style="color:black"><i class="far fa-edit" @click="forEdit(todo)" data-toggle="modal" data-target="#exampleModal"></i></a> || <a href="#" style="color:black"><i class="far fa-trash-alt" @click="deleteTask(todo._id)"></i></a></td>
         
           <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
@@ -30,9 +30,9 @@ Vue.component('todo-list', {
                   <div class="modal-body">
                     <form id="formEdit">
                       <label>Task: </label><br>
-                      <input type="text" v-model="todo.task"><br>
+                      <input type="text" v-model="dataEdit.task"><br>
                       <label>Duedate: </label><br>
-                      <input type="date" v-model="todo.dueDate"><br><br>
+                      <input type="date" v-model="dataEdit.dueDate"><br><br>
                       <select v-model="newStatus">
                         <option disabled value="">Please select the status</option>
                         <option value="uncomplete">Uncomplete</option>
@@ -42,7 +42,7 @@ Vue.component('todo-list', {
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnsave" @click="editTask({id: todo._id, task: todo.task, dueDate: todo.dueDate, status: newStatus})">Save changes</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnsave" @click="editTask({id: dataEdit._id, task: dataEdit.task, dueDate: dataEdit.dueDate, status: newStatus})">Save changes</button>
                   </div>
                 </div>
               </div>
@@ -54,7 +54,8 @@ Vue.component('todo-list', {
   data () {
     return {
       todos: [],
-      newStatus: ''
+      newStatus: '',
+      dataEdit: ''
     }
   },
   created () {
@@ -76,7 +77,6 @@ Vue.component('todo-list', {
       })
       .then(tasks => {
         this.todos = tasks.data.allTasks
-        console.log(this.todos)
       })
       .catch(err => {
         console.log(err.message)
@@ -128,6 +128,10 @@ Vue.component('todo-list', {
       // .catch(err => {
       //   console.log(err)
       // })
+    },
+    forEdit(input){
+      console.log(input)
+      this.dataEdit = input
     }
   }
 })

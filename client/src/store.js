@@ -12,7 +12,8 @@ export default new Vuex.Store({
   state: {
     tasks: [],
     deadline: [],
-    isDealine: false
+    isDealine: false,
+    dataEdit: ''
   },
   mutations: {
     setTasks (state, payload) { // buat function setTasks
@@ -137,6 +138,9 @@ export default new Vuex.Store({
     logout () {
       localStorage.clear()
       router.push('/')
+    },
+    forEdit (context, payload) {
+      this.state.dataEdit = payload
     }
   }
 })
