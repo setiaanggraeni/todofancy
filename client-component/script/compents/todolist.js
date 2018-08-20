@@ -55,7 +55,8 @@ Vue.component('todo-list', {
     return {
       todos: [],
       newStatus: '',
-      dataEdit: ''
+      dataEdit: '',
+      deadline: []
     }
   },
   created () {
@@ -77,6 +78,16 @@ Vue.component('todo-list', {
       })
       .then(tasks => {
         this.todos = tasks.data.allTasks
+        this.todos.forEach(el => {
+          let now = new Date().getDate()
+          let isDeadlineTrue = Number(el.dueDate.split('-')[2].split('T')[0]) - now
+          if (isDeadlineTrue >= 0 && isDeadlineTrue <= 1) {
+            this.deadline.push(el)
+          }
+        })
+        if(this.deadline.length !== 0){
+          this.sendMail()
+        }
       })
       .catch(err => {
         console.log(err.message)
@@ -117,17 +128,16 @@ Vue.component('todo-list', {
       })
     },
     sendMail(){
-
-      // axios.post('http://localhost:3000/users/sendmail', {
-      //   email: this.todos[0].userId.email,
-      //   yourDeadline: this.state.deadline
-      // })
-      // .then(emailSent => {
-      //   console.log('email sent')
-      // })
-      // .catch(err => {
-      //   console.log(err)
-      // })
+      axios.post('http://localhost:3000/users/sendmail', {
+        email: this.todos[0].userId.email,
+        yourDeadline: this.deadline
+      })
+      .then(emailSent => {
+        console.log('email sent')
+      })
+      .catch(err => {
+        console.log(err)
+      })
     },
     forEdit(input){
       console.log(input)
