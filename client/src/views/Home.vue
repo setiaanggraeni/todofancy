@@ -70,7 +70,7 @@ export default {
       name: '',
       newTask: '',
       newDuedate: '',
-      newStatus: '', 
+      newStatus: '',
       username: ''
     }
   },

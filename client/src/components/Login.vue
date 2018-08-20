@@ -4,7 +4,7 @@
       <label id="loginText"><h2>Setia's Todo</h2></label>
       <input type="email" v-model="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
       <input type="password" v-model="password" class="form-control" id="password" placeholder="Password">
-      <button type="submit" id="btnLogin" @click="login({email: email, password: password})" class="btn btn-primary">Login</button><br><br>
+      <button type="submit" id="btnLogin" @click.prevent="login({email: email, password: password})" class="btn btn-primary">Login</button><br><br>
       <small id="register" class="form-text text-muted">No have any account? Manual <a href="#" @click="register">register</a> or login with<img src="../assets/facebook.png" id="fbicon" @click="loginFb"/></small>
     </form>
   </div>
@@ -34,7 +34,6 @@ export default {
     loginFb () {
       auth.signInWithPopup(provider).then(function (result) {
         var token = result.credential.accessToken
-        // 
         axios({
           method: 'POST',
           url: 'http://localhost:3000/users/loginFb',
